@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Recognition App</title>
+</head>
+<body>
+    <h1>Image Recognition App</h1>
+    <input type="file" id="image" accept="image/*">
+    <button onclick="submitImage()">Submit</button>
+    <p id="prediction"></p>
+
+    <script>
+        async function submitImage() {
+            const imageInput = document.getElementById('image');
+            if (!imageInput.files.length) {
+                alert('Please select an image');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', imageInput.files[0]);
+
+            const response = await fetch('/predict', { method: 'POST', body: formData });
+            if (!response.ok) {
+                alert('Failed to process the image');
+                return;
+            }
+
+            const result = await response.json();
+            document.getElementById('prediction').textContent = `Prediction: ${result.prediction}`;
+        }
+    </script>
+</body>
+</html>
